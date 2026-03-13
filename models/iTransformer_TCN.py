@@ -10,7 +10,7 @@ class TCN_iTransformer(nn.Module):
                  length_MC=10, dim_embed=512, depth=6, heads=8, dim_mlp=20, dim_head=128):
         super(TCN_iTransformer, self).__init__()
         self.model1 = iTransformer_block(num_variates=input_size, lookback_len=length_MC,
-                                         heads=8, dim_head=64, pred_length=(10), num_class=num_classes, dim=dim_embed, depth=depth,
+                                         heads=8, dim_head=64, pred_length=(10), dim=dim_embed, depth=depth,
                                          num_tokens_per_variate=1, use_reversible_instance_norm=True)
         self.model2 = TemporalConvNet(num_inputs=input_size, num_channels=num_channels,
                                       kernel_size=kernel_size, dropout=0.1)
@@ -89,7 +89,7 @@ class parallel_iTransformer_TCN(nn.Module):
                  length_MC=10, dim_embed=512, depth=6, heads=8, dim_mlp=20, dim_head=128):
         super(parallel_iTransformer_TCN, self).__init__()
         self.model1 = iTransformer_block(num_variates=input_size, lookback_len=length_MC,
-                                         heads=8, dim_head=64, pred_length=(10), num_class=num_classes, dim=dim_embed, depth=depth,
+                                         heads=8, dim_head=64, pred_length=(10), dim=dim_embed, depth=depth,
                                          num_tokens_per_variate=1, use_reversible_instance_norm=True)
         self.model2 = TemporalConvNet(num_inputs=input_size, num_channels=num_channels,
                                       kernel_size=kernel_size, dropout=0.2)

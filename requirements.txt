@@ -1,0 +1,16 @@
+einops==0.8.0
+beartype==0.18.5
+fightingcv-attention==1.0.0
+matplotlib==3.9.2
+numpy==1.26.3
+optuna==4.0.0
+optuna-dashboard==0.16.2
+pandas==2.2.3
+scikit-learn==1.5.2
+scipy==1.13.1
+shap==0.46.0
+torch==2.6.0
+torchaudio==2.6.0
+torchvision==0.21.0
+tqdm==4.66.5
+dill==0.3.8

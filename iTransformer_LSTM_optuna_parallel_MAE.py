@@ -1,5 +1,6 @@
 import argparse
 import csv
+import os
 import time
 import pandas as pd
 import torch
@@ -41,7 +42,7 @@ if __name__ == "__main__":
     time_length = 24
     # predict_length = [1,4]
     predict_length = 1
-    device = torch.device('cuda:0')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     df_all = pd.read_csv(file_path, header=0)
     multi_steps = False
     epoch=0
@@ -76,6 +77,7 @@ if __name__ == "__main__":
 
         model_name = f"iTransformer_lstm_optuna_{dataset}"
         model_save = f"model_save/{dataset}/{model_name}.pt"
+        os.makedirs(f'model_save/{dataset}', exist_ok=True)
         train_losses, valid_losses = [], []
         earlystopping = EarlyStopping(model_save, patience=10, delta=0.0001)
 
@@ -114,6 +116,7 @@ if __name__ == "__main__":
             data=test_loader, model=model, criterion=criterion_MAE)
 
         print(f'Test_valid:{test_loss:.4f}|MAE:{ms_test[0]:.4f}|RMSE:{ms_test[1]:.4f}|R2:{ms_test[2]:.4f}|MBE:{ms_test[3]:.4f}', )
+        os.makedirs(f'data_record/{dataset}', exist_ok=True)
         with open(f'data_record/{dataset}/Metrics_{model_name}.csv', 'a', encoding='utf-8', newline='') as f:
             csv_write = csv.writer(f)
             csv_write.writerow([f'{site}_pred1_{model_name}', ms_test[0], ms_test[1], ms_test[2], ms_test[3]])
