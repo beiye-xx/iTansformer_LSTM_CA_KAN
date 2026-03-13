@@ -1,8 +1,0 @@
-__pycache__/
-*.py[cod]
-.idea/
-*.db
-*.sqlite
-*.sqlite3
-data_record/
-tmp/

@@ -76,7 +76,7 @@ class EarlyStopping:
         torch.save(model, path, pickle_module=dill)  # 这里会存储迄今最优模型的参数
         self.val_loss_min = val_loss
 
-def train(data, model, criterion, optm, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
+def train(data, model, criterion, optm, device=torch.device("cuda:0")):
     model.train()
     running_loss = 0.0
     for x, y in tqdm(data):
@@ -90,7 +90,7 @@ def train(data, model, criterion, optm, device=torch.device("cuda" if torch.cuda
         running_loss += loss.item() * x.size(0)
     epoch_loss = running_loss / len(data.dataset)
     return epoch_loss
-def evaluate(data, model, criterion, device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),scalar=None):
+def evaluate(data, model, criterion, device=torch.device("cuda:0"),scalar=None):
     model.eval()
     val_running_loss = 0.0
     all_preds = []

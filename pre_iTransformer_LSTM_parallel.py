@@ -1,6 +1,5 @@
 import argparse
 import csv
-import os
 import time
 import pandas as pd
 import dill
@@ -42,9 +41,10 @@ if __name__ == "__main__":
     time_length = 24 * 1
     # predict_length = [1,4]
     predict_length = 1
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda:0')
     df_all = pd.read_csv(file_path, header=0)
     multi_steps = False
+
     data_train, data_valid, data_test, timestamp_train, timestamp_valid, timestamp_test, scalar = split_data_cnn(df_all, 0.8, 0.1, time_length)
     dataset_train = data_detime(data=data_train, lookback_length=time_length, multi_steps=multi_steps, lookforward_length=predict_length)
     dataset_valid = data_detime(data=data_valid, lookback_length=time_length, multi_steps=multi_steps, lookforward_length=predict_length)
@@ -67,7 +67,6 @@ if __name__ == "__main__":
     )
     model_name = f"iTransformer_TCN_parallel_MAE_{dataset}"
     model_save = f"model_save/{dataset}/{model_name}.pt"
-    os.makedirs(f'model_save/{dataset}', exist_ok=True)
     train_losses, valid_losses = [], []
     earlystopping = EarlyStopping(model_save, patience=10, delta=0.0001)
 
@@ -104,14 +103,13 @@ if __name__ == "__main__":
         plt.title("Train_loss&Valid_loss")
         plt.show()
 with open(model_save, "rb") as f:
-    model = torch.load(f, pickle_module=dill, weights_only=False)
+    model = torch.load(f, pickle_module=dill)
     # print(model)
 model = model.to(device)
 test_loss, ms_test = evaluate(
     data=test_loader, model=model, criterion=criterion_MAE,scalar=scalar)
 
 print(f'Test_valid:{test_loss:.4f}|MAE:{ms_test[0]:.4f}|RMSE:{ms_test[1]:.4f}|R2:{ms_test[2]:.4f}|MBE:{ms_test[3]:.4f}')
-os.makedirs(f'data_record/{dataset}', exist_ok=True)
 with open(f'data_record/{dataset}/Metrics_{model_name}.csv', 'a', encoding='utf-8', newline='') as f:
     csv_write = csv.writer(f)
     csv_write.writerow([f'{site}_pred1_{model_name}', ms_test[0], ms_test[1], ms_test[2], ms_test[3]])
