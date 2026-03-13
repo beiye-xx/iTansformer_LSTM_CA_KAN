@@ -95,7 +95,7 @@ if __name__ == "__main__":
         plt.title("Train_loss&Valid_loss")
         plt.show()
 with open(model_save, "rb") as f:
-    model = torch.load(f, pickle_module=dill)
+    model = torch.load(f, pickle_module=dill, weights_only=False)
 model = model.to(device)
 test_loss, ms_test = evaluate(data=test_loader, model=model, criterion=criterion_MAE,)
 print(f'Test_valid:{test_loss:.4f}|MAE:{ms_test[0]:.4f}|RMSE:{ms_test[1]:.4f}|R2:{ms_test[2]:.4f}|MBE:{ms_test[3]:.4f}', )

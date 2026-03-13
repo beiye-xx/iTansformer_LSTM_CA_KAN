@@ -103,7 +103,7 @@ if __name__ == "__main__":
         plt.title("Train_loss&Valid_loss")
         plt.show()
 with open(model_save, "rb") as f:
-    model = torch.load(f, pickle_module=dill)
+    model = torch.load(f, pickle_module=dill, weights_only=False)
 print(model)
 model = model.to(device)
 test_loss, ms_test = evaluate(
